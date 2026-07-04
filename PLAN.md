@@ -20,17 +20,18 @@
 | 建置 | **GitHub Actions** | 伺服器端建置，發文者不需本機環境 |
 | CMS | **Pages CMS** | git-based（repo 即資料庫，無鎖定）、免費、設定最簡、支援圖片上傳 |
 | 圖片 | repo 內 | 簡單優先；接近 1GB 時再評估 Cloudflare R2 |
-| 網域 | 先用 `<username>.github.io` | 自訂網域可日後隨時加上，不影響架構 |
+| 網域 | **`blog.catcatcatcat.cc`**（2026-07-05 定案） | 原掛於舊 Jekyll blog「Pixels and Pages」（`catcatcatcat.github.io`），已解綁移轉；舊站仍可從 `catcatcatcat.github.io` 訪問；DNS 原本就指向 GitHub Pages，未變動 |
+| 主題 | Astro 官方 blog 模板（非 AstroPaper） | 先求流程通；主題美化屬 Iteration 3 |
 
 ## 迭代規劃
 
 ### Iteration 1 — 骨架上線
 
-- [ ] 建 GitHub repo（public，Pages 需要）
-- [ ] Astro 初始化 + 選一個 blog 主題（候選：AstroPaper、Astro Cactus）
-- [ ] GitHub Actions workflow：push main → 建置 → 部署 Pages
-- [ ] 發第一篇測試文（電腦端），確認上線流程通
-- [ ] 中文顯示確認（字型、日期格式、RSS）
+- [x] 建 GitHub repo（public，Pages 需要）— https://github.com/catcatcatcat/catcat-blog
+- [x] Astro 初始化（Astro 7.0，官方 blog 模板；主題候選 AstroPaper/Cactus 延後至 Iteration 3）
+- [x] GitHub Actions workflow：push main → 建置（`withastro/action@v6`）→ 部署 Pages
+- [x] 發第一篇測試文（電腦端），確認上線流程通 — 2026-07-05 上線 https://blog.catcatcatcat.cc/
+- [ ] 中文顯示確認（字型、日期格式、RSS）— 內文可顯示，字型與日期格式未調
 
 ### Iteration 2 — 手機發文流程
 

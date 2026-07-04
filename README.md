@@ -20,7 +20,12 @@
 
 ## 狀態
 
-規劃中（2026-07-05），尚未建置。開發規劃與進度見 [PLAN.md](PLAN.md)。
+🟢 已上線：https://blog.catcatcatcat.cc/ （2026-07-05）
+
+- Repo: https://github.com/catcatcatcat/catcat-blog （push `main` 即自動部署）
+- 待辦：Pages CMS 手機發文流程（Iteration 2）、主題美化與中文字型（Iteration 3）
+
+開發規劃與進度見 [PLAN.md](PLAN.md)。
 
 ## 本地開發（選用）
 
