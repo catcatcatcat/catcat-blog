@@ -61,3 +61,41 @@
 - GitHub Pages 網站本體為公開；repo 設 public 表示文章原始檔亦公開（草稿注意）
 - Pages CMS 需授權存取 GitHub repo（OAuth），僅授權該 repo 為佳
 - Astro 版本迭代快：實作前先確認當下安裝版本的文件，勿憑舊知識寫設定
+
+---
+
+## Iteration 2 執行規格（2026-07-18 補）
+
+> 目標：手機瀏覽器全程完成「寫文 → 貼圖 → 發布」。步驟固定，執行 agent 不得自創欄位或改主題樣式（樣式屬 Iteration 3）。
+
+### 步驟 0：對齊實際 content schema（動工第一步）
+
+- 讀 repo 的 content collection 設定檔（Astro 7 官方 blog 模板通常在 `src/content.config.ts` 或 `src/content/config.ts`）與一篇既有文章的 front matter。
+- `.pages.yml` 的欄位**必須逐字對齊實際 schema**（模板預設：`title`／`description`／`pubDate`／`updatedDate`／`heroImage`）；不得發明新欄位、不得改 schema 遷就 CMS。
+
+### 步驟 1：撰寫 `.pages.yml`
+
+- content 定義：type collection、path 指向實際文章目錄（如 `src/content/blog`）、欄位型別對映（date 欄用 date type、heroImage 用 image type）。
+- media 設定：上傳目錄對齊模板圖片實際存放處與引用方式（步驟 0 一併查明），確保 CMS 上傳的圖片路徑能被文章直接引用。
+- commit push 後於 Pages CMS 網頁端確認讀得到設定。
+
+### 步驟 2：連接 Pages CMS（使用者親辦）
+
+- pagescms.org 以 GitHub 登入 → **授權範圍只選 `catcat-blog` 單一 repo**（不給 all repositories）。
+- agent 不代辦 OAuth；只負責事前說明畫面流程、事後驗證。
+
+### 步驟 3：手機實測 checklist
+
+- [ ] 手機開 Pages CMS → 新增文章（中文標題＋內文）→ 上傳一張照片插入 → 發布
+- [ ] GitHub Actions 自動建置成功 → https://blog.catcatcatcat.cc/ 出現新文，圖片正常顯示
+- [ ] 再次編輯同文（改字＋換圖）→ 發布 → 上線內容更新
+- [ ] 中文 slug／檔名行為確認（若 CMS 產生的檔名不理想，記錄現象回報，不擅自改規則）
+
+### 步驟 4：文件化
+
+- README 補「如何發文」節：手機操作步驟＋圖片注意事項＋失敗排查（Actions 紅燈看哪裡）。
+
+### 守門
+
+- repo 為 public：**草稿也是公開的**，測試文內容注意不要含個資。
+- 不動 Iteration 3 範圍（About、標籤、統計）；未決事項（內容主軸、Blog 名稱、授權）仍屬使用者拍板，agent 不得代決。
