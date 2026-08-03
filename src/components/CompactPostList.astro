@@ -1,0 +1,78 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import TagChips from './TagChips.astro';
+import { getPostUrl, type BlogPost } from '../utils/posts';
+
+interface Props {
+	posts: BlogPost[];
+	emptyMessage?: string;
+}
+
+const { posts, emptyMessage = '目前沒有文章。' } = Astro.props;
+---
+
+{
+	posts.length === 0 ? (
+		<p class="empty-state">{emptyMessage}</p>
+	) : (
+		<ul class="post-list">
+			{posts.map((post) => (
+				<li>
+					<div>
+						<a class="post-title" href={getPostUrl(post)}>{post.data.title}</a>
+						<p>{post.data.description}</p>
+						<TagChips tags={post.data.tags} />
+					</div>
+					<p class="post-date"><FormattedDate date={post.data.pubDate} /></p>
+				</li>
+			))}
+		</ul>
+	)
+}
+
+<style>
+	.post-list {
+		padding: 0;
+		margin: 2rem 0 0;
+		list-style: none;
+	}
+	.post-list > li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 1.5rem;
+		padding: 1.25rem 0;
+		border-bottom: 1px solid var(--color-teal);
+	}
+	.post-title {
+		font-family: 'Orbitron', sans-serif;
+		font-size: 1.2em;
+		font-weight: 700;
+		text-decoration: none;
+	}
+	.post-list p {
+		margin: 0.35rem 0 0;
+	}
+	.post-date {
+		white-space: nowrap;
+		color: var(--color-mint);
+	}
+	.empty-state {
+		padding: 2rem;
+		border: 1px dashed var(--color-teal);
+		border-radius: 12px;
+		text-align: center;
+	}
+	:global(.post-list .tag-chips) {
+		justify-content: flex-start;
+	}
+	@media (max-width: 600px) {
+		.post-list > li {
+			grid-template-columns: 1fr;
+			gap: 0.35rem;
+		}
+		.post-date {
+			grid-row: 1;
+			font-size: 0.85em;
+		}
+	}
+</style>

@@ -1,0 +1,91 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+import { getPostUrl, getPosts, type BlogPost } from '../utils/posts';
+
+const posts = await getPosts();
+const postsByYear = posts.reduce((groups, post) => {
+	const year = post.data.pubDate.getUTCFullYear();
+	const yearPosts = groups.get(year) ?? [];
+	yearPosts.push(post);
+	groups.set(year, yearPosts);
+	return groups;
+}, new Map<number, BlogPost[]>());
+const years = [...postsByYear.entries()].sort(([a], [b]) => b - a);
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+	<head>
+		<BaseHead title={`Archive | ${SITE_TITLE}`} description="依發布日期瀏覽全部文章。" />
+		<style>
+			.archive {
+			display: grid;
+			gap: 1rem;
+			margin-top: 2rem;
+			}
+			details {
+				border: 1px solid var(--color-teal);
+				border-radius: 10px;
+				background: var(--color-dark-2);
+			}
+			summary {
+				padding: 1rem 1.25rem;
+				color: var(--color-mint);
+				font-family: 'Orbitron', sans-serif;
+				font-size: 1.2em;
+				cursor: pointer;
+			}
+			summary:focus-visible {
+				outline: 2px solid var(--color-pink);
+				outline-offset: 3px;
+			}
+			.archive-list {
+				padding: 0 1.25rem 1rem;
+				margin: 0;
+				list-style: none;
+			}
+			.archive-list li {
+				display: grid;
+				grid-template-columns: 8rem minmax(0, 1fr);
+				gap: 1rem;
+				padding: 0.7rem 0;
+				border-top: 1px solid rgba(19, 122, 127, 0.55);
+			}
+			.archive-list a {
+				text-decoration: none;
+			}
+			@media (max-width: 520px) {
+				.archive-list li {
+					grid-template-columns: 1fr;
+					gap: 0.15rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Archive</h1>
+			<p>全部文章依發布日期由新到舊排列。</p>
+			<div class="archive">
+				{
+					years.map(([year, yearPosts], index) => (
+						<details open={index === 0}>
+							<summary>{year}（{yearPosts.length}）</summary>
+							<ul class="archive-list">
+								{yearPosts.map((post) => (
+									<li><FormattedDate date={post.data.pubDate} /><a href={getPostUrl(post)}>{post.data.title}</a></li>
+								))}
+							</ul>
+						</details>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

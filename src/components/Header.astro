@@ -7,8 +7,10 @@ import HeaderLink from './HeaderLink.astro';
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
+			<HeaderLink href="/blog">文章</HeaderLink>
+			<HeaderLink href="/tags">Tags</HeaderLink>
+			<HeaderLink href="/search">搜尋</HeaderLink>
+			<HeaderLink href="/archive">Archive</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
 		</div>
 	</nav>
@@ -38,6 +40,13 @@ import HeaderLink from './HeaderLink.astro';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 1rem;
+	}
+	.internal-links {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		flex-wrap: wrap;
 	}
 	nav a {
 		padding: 1em 0.5em;
@@ -55,5 +64,23 @@ import HeaderLink from './HeaderLink.astro';
 		text-decoration: none;
 		color: var(--color-pink);
 		border-bottom-color: var(--color-pink);
+	}
+	@media (max-width: 720px) {
+		header {
+			padding: 0.75rem 0.75rem 0;
+		}
+		nav {
+			justify-content: center;
+			flex-direction: column;
+			gap: 0.35rem;
+		}
+		.internal-links {
+			justify-content: center;
+			width: 100%;
+		}
+		nav a {
+			padding: 0.55rem 0.45rem;
+			font-size: 0.72em;
+		}
 	}
 </style>

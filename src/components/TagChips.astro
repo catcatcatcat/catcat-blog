@@ -1,0 +1,54 @@
+---
+import { getTagLabel } from '../data/tags';
+
+interface Props {
+	tags: string[];
+	pagefind?: boolean;
+}
+
+const { tags, pagefind = false } = Astro.props;
+---
+
+{
+	tags.length > 0 && (
+		<ul class="tag-chips" aria-label="文章標籤">
+			{tags.map((tag) => (
+				<li>
+					<a
+						href={`/tags/${tag}/`}
+						data-pagefind-filter={pagefind ? 'tag' : undefined}
+					>
+						{getTagLabel(tag)}
+					</a>
+				</li>
+			))}
+		</ul>
+	)
+}
+
+<style>
+	.tag-chips {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		padding: 0;
+		margin: 0.85rem 0 0;
+		list-style: none;
+	}
+	.tag-chips a {
+		display: inline-block;
+		padding: 0.2rem 0.65rem;
+		border: 1px solid var(--color-teal);
+		border-radius: 999px;
+		background: var(--color-dark-2);
+		color: var(--color-mint);
+		font-size: 0.82em;
+		text-decoration: none;
+	}
+	.tag-chips a:hover,
+	.tag-chips a:focus-visible {
+		border-color: var(--color-pink);
+		color: var(--color-pink);
+	}
+</style>

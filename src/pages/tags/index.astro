@@ -1,0 +1,74 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { TAGS } from '../../data/tags';
+import { getPosts } from '../../utils/posts';
+
+const posts = await getPosts();
+const tags = Object.entries(TAGS)
+	.map(([id, definition]) => ({
+		id,
+		label: definition.label,
+		count: posts.filter((post) => post.data.tags.includes(id)).length,
+	}))
+	.sort((a, b) => a.label.localeCompare(b.label, 'zh-Hant'));
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+	<head>
+		<BaseHead title={`Tags | ${SITE_TITLE}`} description="依標籤瀏覽文章。" />
+		<style>
+			.tag-list {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+				gap: 1rem;
+				padding: 0;
+				margin: 2rem 0 0;
+				list-style: none;
+			}
+			.tag-list a {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+				padding: 1rem;
+				border: 1px solid var(--color-teal);
+				border-radius: 10px;
+				background: var(--color-dark-2);
+				text-decoration: none;
+			}
+			.count {
+				color: var(--color-gray);
+				font-size: 0.85em;
+			}
+			.empty-state {
+				padding: 2rem;
+				border: 1px dashed var(--color-teal);
+				border-radius: 12px;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Tags</h1>
+			<p>這裡只會顯示站主明確指定或批准的 tags。</p>
+			{
+				tags.length === 0 ? (
+					<p class="empty-state">目前尚未指定任何 tag。</p>
+				) : (
+					<ul class="tag-list">
+						{tags.map((tag) => (
+							<li><a href={`/tags/${tag.id}/`}><span>{tag.label}</span><span class="count">{tag.count} 篇</span></a></li>
+						))}
+					</ul>
+				)
+			}
+		</main>
+		<Footer />
+	</body>
+</html>

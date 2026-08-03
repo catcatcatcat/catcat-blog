@@ -1,0 +1,80 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+	<head>
+		<BaseHead title={`搜尋 | ${SITE_TITLE}`} description="搜尋 Pixels and Pages 的文章。" />
+		<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet" />
+		<script is:inline src="/pagefind/pagefind-component-ui.js" type="module"></script>
+		<style is:global>
+			.search-panel {
+				--pf-text: var(--color-gray);
+				--pf-text-secondary: var(--color-mint);
+				--pf-text-muted: var(--color-gray);
+				--pf-background: var(--color-dark-2);
+				--pf-border: var(--color-teal);
+				--pf-border-focus: var(--color-pink);
+				--pf-hover: var(--color-dark);
+				--pf-mark: var(--color-pink);
+				--pf-outline-focus: var(--color-mint);
+				--pf-font: 'Chakra Petch', sans-serif;
+				--pf-input-height: 3rem;
+				--pf-input-font-size: 1rem;
+				--pf-result-title-font-size: 1.05rem;
+				--pf-result-excerpt-font-size: 0.9rem;
+				--pf-border-radius: 8px;
+				margin-top: 2rem;
+			}
+			.search-panel pagefind-summary {
+				display: block;
+				margin: 0.8rem 0;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>搜尋</h1>
+			<p>搜尋文章標題、摘要、內文與已指定的 tags。</p>
+			<div class="search-panel" data-pf-theme="dark">
+				<pagefind-input placeholder="輸入關鍵字"></pagefind-input>
+				<pagefind-summary></pagefind-summary>
+				<pagefind-results></pagefind-results>
+			</div>
+			<noscript>站內搜尋需要啟用 JavaScript。</noscript>
+		</main>
+		<Footer />
+		<script is:inline type="module">
+			await customElements.whenDefined('pagefind-input');
+			const manager = window.PagefindComponents.getInstanceManager();
+			const instance = manager.getInstance('default');
+			instance.setTranslations({
+				placeholder: '輸入關鍵字',
+				input_hint: '輸入時將顯示結果',
+				search_label: '站內搜尋',
+				results_label: '搜尋結果',
+				clear: '清除',
+				clear_search: '清除搜尋',
+				searching: '正在搜尋「[SEARCH_TERM]」',
+				zero_results: '找不到與「[SEARCH_TERM]」相關的文章',
+				one_result: '找到 1 篇與「[SEARCH_TERM]」相關的文章',
+				many_results: '找到 [COUNT] 篇與「[SEARCH_TERM]」相關的文章',
+				total_zero_results: '沒有搜尋結果',
+				total_one_result: '共 1 篇',
+				total_many_results: '共 [COUNT] 篇',
+				loading: '載入中',
+				error_search: '搜尋暫時無法使用',
+				keyboard_clear: '清除',
+				keyboard_search: '搜尋',
+				keyboard_navigate: '移動',
+				keyboard_select: '選擇',
+				keyboard_close: '關閉',
+			});
+		</script>
+	</body>
+</html>

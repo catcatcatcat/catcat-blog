@@ -1,0 +1,45 @@
+---
+import CompactPostList from '../../components/CompactPostList.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { TAGS } from '../../data/tags';
+import { getPosts, type BlogPost } from '../../utils/posts';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+
+	return Object.entries(TAGS).map(([id, definition]) => ({
+		params: { tag: id },
+		props: {
+			label: definition.label,
+			posts: posts.filter((post) => post.data.tags.includes(id)),
+		},
+	}));
+}
+
+interface Props {
+	label: string;
+	posts: BlogPost[];
+}
+
+const { label, posts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+	<head>
+		<BaseHead title={`${label} | ${SITE_TITLE}`} description={`標記為「${label}」的文章。`} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<p><a href="/tags/">← 所有 Tags</a></p>
+			<h1>{label}</h1>
+			<p>共 {posts.length} 篇文章</p>
+			<CompactPostList posts={posts} />
+		</main>
+		<Footer />
+	</body>
+</html>

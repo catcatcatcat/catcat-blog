@@ -5,15 +5,30 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import TagChips from '../components/TagChips.astro';
+import { getTagLabel } from '../data/tags';
+import { getPostUrl, type BlogPost } from '../utils/posts';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = Omit<CollectionEntry<'blog'>['data'], 'tags'> & {
+	tags?: string[];
+	id?: string;
+	newerPost?: BlogPost;
+	olderPost?: BlogPost;
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], id, newerPost, olderPost } =
+	Astro.props;
+const isArticle = Boolean(id);
+const tagLabels = tags.map(getTagLabel);
+const publishedDate = pubDate.toISOString().slice(0, 10);
 ---
 
-<html lang="en">
+<html lang="zh-Hant">
 	<head>
 		<BaseHead title={title} description={description} />
+		{isArticle && <meta data-pagefind-meta="description[content]" content={description} />}
+		{isArticle && <meta data-pagefind-meta="date[content]" content={publishedDate} />}
+		{isArticle && tagLabels.length > 0 && <meta data-pagefind-meta="tags[content]" content={tagLabels.join('、')} />}
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -52,15 +67,48 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			.last-updated-on {
 				font-style: italic;
 			}
+			.post-navigation {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 1rem;
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: 2rem auto 0;
+				padding: 1.5rem 1rem 0;
+				border-top: 1px solid var(--color-teal);
+			}
+			.post-navigation a {
+				display: block;
+				padding: 0.85rem;
+				border: 1px solid var(--color-teal);
+				border-radius: 8px;
+				text-decoration: none;
+			}
+			.post-navigation .older {
+				text-align: right;
+			}
+			.back-to-posts {
+				display: block;
+				width: fit-content;
+				margin: 2rem auto 0;
+			}
+			@media (max-width: 600px) {
+				.post-navigation {
+					grid-template-columns: 1fr;
+				}
+				.post-navigation .older {
+					text-align: left;
+				}
+			}
 		</style>
 	</head>
 
 	<body>
 		<Header />
 		<main>
-			<article>
+			<article data-pagefind-body={isArticle ? '' : undefined}>
 				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+					{heroImage && <Image width={1020} height={510} src={heroImage} alt={title} />}
 				</div>
 				<div class="prose">
 					<div class="title">
@@ -74,11 +122,27 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 								)
 							}
 						</div>
-						<h1>{title}</h1>
+						<h1 data-pagefind-meta={isArticle ? 'title' : undefined}>{title}</h1>
+						{isArticle && <TagChips tags={tags} pagefind />}
 						<hr />
 					</div>
 					<slot />
 				</div>
+				{
+					isArticle && (
+						<>
+							<nav class="post-navigation" aria-label="相鄰文章">
+								<div>
+									{newerPost && <a href={getPostUrl(newerPost)}>← 較新文章<br />{newerPost.data.title}</a>}
+								</div>
+								<div class="older">
+									{olderPost && <a href={getPostUrl(olderPost)}>較舊文章 →<br />{olderPost.data.title}</a>}
+								</div>
+							</nav>
+							<a class="back-to-posts" href="/blog/">回到文章列表</a>
+						</>
+					)
+				}
 			</article>
 		</main>
 		<Footer />

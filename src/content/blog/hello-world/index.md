@@ -2,6 +2,7 @@
 title: '測試發布：這個 blog 開張了'
 description: '第一篇測試文章，確認從 Markdown 到上線的整條路是通的。'
 pubDate: '2026-07-05'
+tags: []
 ---
 
 這是一篇測試文章。
