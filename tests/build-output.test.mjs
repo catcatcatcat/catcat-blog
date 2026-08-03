@@ -51,7 +51,9 @@ test('archive is date-grouped and tags remain empty without owner approval', asy
 	]);
 
 	assert.match(archive, /<details open/);
-	assert.match(archive, /2026（1）/);
+	const postsPublishedIn2026 = [...archive.matchAll(/datetime="2026-/g)].length;
+	assert.ok(postsPublishedIn2026 > 0);
+	assert.match(archive, new RegExp(`2026（${postsPublishedIn2026}）`));
 	assert.match(archive, /href="\/blog\/hello-world\/"/);
 	assert.match(tags, /目前尚未指定任何 tag/);
 	assert.doesNotMatch(tags, /class="tag-list"/);
