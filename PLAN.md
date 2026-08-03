@@ -44,7 +44,7 @@
 - [x] Archive：依發布日期分年、可收合的文章清單
 - [x] 響應式導覽：文章／Tags／搜尋／Archive／About
 - [x] 發文流程文件化：README 與專案 AGENTS.md
-- [ ] 手機實際上傳 1 份 Markdown＋2 張圖片做附件鏈路驗收；不成立時才評估 Blog Inbox 備援
+- [x] 對話貼上 Markdown＋2 張圖片的附件鏈路、預覽與截圖流程實測通過，貓貓國王於 2026-08-04 驗收；Codex 無法判斷訊息來源裝置，因此不把本次結果宣稱為裝置鑑別
 
 ### Iteration 3 — 打磨（依需要）
 
@@ -122,7 +122,7 @@ src/content/blog/<ascii-slug>/
 - 中文標題、內文與已授權 tags 可搜尋；聚合頁不出現在結果。
 - 390px、768px、1440px 視口無水平溢出，導覽、搜尋、tag chips、Archive 可由觸控與鍵盤操作。
 - RSS、sitemap 與 GitHub Pages workflow 維持正常。
-- 電腦附件流程由 agent 驗證；手機附件到 repo 的鏈路需在使用者可操作手機時完成一次真機驗收，失敗才設計外部 Blog Inbox。
+- 對話附件到 repo、build、響應式預覽與截圖鏈路已於 2026-08-04 驗收通過；來源裝置不會暴露給 Codex，不再以裝置鑑別作為完成條件，暫不需要外部 Blog Inbox。
 
 ### 7. 文件與 commit 邊界
 
